@@ -1,0 +1,13 @@
+package com.example.repo;
+
+import com.example.model.Patient;
+import org.springframework.stereotype.Repository;
+
+//@Repository
+public class PatientRepoImpl {//implements IPatientRepo {
+
+    /*@Override
+    public Patient getPatientById(Integer id){
+        return new Patient();
+    }*/
+}

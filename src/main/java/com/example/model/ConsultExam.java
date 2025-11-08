@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.example.dto;
+package com.example.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +18,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientInsDto {
+@Entity
+@IdClass(ConsultExamPK.class)
+public class ConsultExam {
 
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String phone;
-    
+    @Id
+    private Consult consult;
+
+    @Id
+    private Exam exam;
+
 }
