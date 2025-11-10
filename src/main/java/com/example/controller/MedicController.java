@@ -19,14 +19,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @RequestMapping("/v1/medics")
 public class MedicController {
 
     private final IMedicService service;
+    private final ModelMapper medicMapper; // <-- Asegúrate que es el medicMapper
 
-    @Qualifier("medicMapper")
-    private final ModelMapper modelMapper;
+    public MedicController(IMedicService service,
+            @Qualifier("medicMapper") ModelMapper medicMapper) {
+        this.service = service;
+        this.medicMapper = medicMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<MedicDTO>> findAll() throws Exception {
@@ -44,9 +48,14 @@ public class MedicController {
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody MedicDTO dto) throws Exception {
-        Medic obj = service.save(modelMapper.map(dto, Medic.class));
+        // Usa medicMapper en vez de defaultMapper
+        Medic obj = service.save(medicMapper.map(dto, Medic.class));
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdMedic()).toUri();
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(obj.getIdMedic())
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
@@ -81,12 +90,12 @@ public class MedicController {
         return resource;
     }
 
-    private Medic convertToEntity(MedicDTO dto){
-        return modelMapper.map(dto, Medic.class);
+    private Medic convertToEntity(MedicDTO dto) {
+        return medicMapper.map(dto, Medic.class);
     }
 
-    private MedicDTO convertToDto(Medic entity){
-        return modelMapper.map(entity, MedicDTO.class);
+    private MedicDTO convertToDto(Medic entity) {
+        return medicMapper.map(entity, MedicDTO.class);
     }
 
 }
